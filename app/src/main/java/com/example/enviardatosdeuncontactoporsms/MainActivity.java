@@ -1,7 +1,7 @@
 package com.example.enviardatosdeuncontactoporsms;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,32 +10,40 @@ import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Toast;
 
-import static java.net.Proxy.Type.HTTP;
-
 public class MainActivity extends AppCompatActivity {
+
+    static final int CONTS_MOSTRAR_CONTACTO = 1;
+    static final int CONTS_ENVIAR_CONTACTO = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        selectContact();
+        
     }
 
-    static final int REQUEST_SELECT_PHONE_NUMBER = 1;
+    public void SelecionarMostrarContacto(View view){
+        seleccionarContacto(1);
+    }
 
-    public void selectContact() {
+    public void SelecionarEnviarContacto(View view){
+        seleccionarContacto(2);
+    }
+
+    public void seleccionarContacto(int accion) {
         Intent intentSeleccionarContacto = new Intent(Intent.ACTION_PICK);
-        intentSeleccionarContacto.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        startActivityForResult(intentSeleccionarContacto, REQUEST_SELECT_PHONE_NUMBER);
+        if(accion==1){
+            intentSeleccionarContacto.setType(ContactsContract.Contacts.CONTENT_TYPE);
+        }else {
+            intentSeleccionarContacto.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        }
+        startActivityForResult(intentSeleccionarContacto, accion);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SELECT_PHONE_NUMBER && resultCode == RESULT_OK) {
-            // Get the URI and query the content provider for the phone number
+        if (requestCode == CONTS_ENVIAR_CONTACTO && resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
             Cursor cursor = getContentResolver().query(contactUri, null,null, null, null);
             // If the cursor returned is valid, get the phone number
@@ -50,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 String DatosDeContacto = "Nombre: " + nombre + "\nNúmero de telefono: "+ numero;
                 enviarTexto(DatosDeContacto);
             }
-
+        }
+       if (requestCode == CONTS_MOSTRAR_CONTACTO && resultCode == RESULT_OK) {
+            Uri contactUri = data.getData();
+            verContacto(contactUri);
         }
     }
 
@@ -59,9 +70,13 @@ public class MainActivity extends AppCompatActivity {
         IntentEnviarTexto.setData(Uri.parse("smsto:"));  // This ensures only SMS apps respond
         IntentEnviarTexto.putExtra("sms_body", textMessage);
         IntentEnviarTexto.setType("text/plain");
-        //IntentEnviarTexto.putExtra(Intent.EXTRA_TEXT, textMessage);
         if (IntentEnviarTexto.resolveActivity(getPackageManager()) != null) {
             startActivity(IntentEnviarTexto);
         }
+    }
+
+    public void verContacto(Uri contactUri) {
+        Intent intentVerContacto = new Intent(Intent.ACTION_VIEW, contactUri);
+        startActivity(intentVerContacto);
     }
 }
