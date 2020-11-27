@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Enviar datos de un contacto por SMS</string>
-    <string name="seleccionar_y_mostrar_contacto">Seleccionar y Mostrar Contacto</string>
-    <string name="seleccionar_y_enviar_contacto">Seleccionar y Enviar Contacto</string>
+    <string name="seleccionar_y_mostrar_contacto">Seleccionar y Mostrar un Contacto</string>
+    <string name="seleccionar_y_enviar_contacto">Seleccionar y Enviar un Contacto</string>
+    <string name="seleccionar_y_llamar_contacto">Seleccionar y Enviar a un Contacto</string>
 </resources>

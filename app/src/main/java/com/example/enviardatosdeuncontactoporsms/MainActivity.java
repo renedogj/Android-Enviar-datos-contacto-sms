@@ -14,12 +14,13 @@ public class MainActivity extends AppCompatActivity {
 
     static final int CONTS_MOSTRAR_CONTACTO = 1;
     static final int CONTS_ENVIAR_CONTACTO = 2;
+    static final int CONTS_LLAMAR_CONTACTO = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
     }
 
     public void SelecionarMostrarContacto(View view){
@@ -28,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void SelecionarEnviarContacto(View view){
         seleccionarContacto(2);
+    }
+
+    public void SelecionarLlamarContacto(View view){
+        seleccionarContacto(3);
     }
 
     public void seleccionarContacto(int accion) {
@@ -43,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONTS_MOSTRAR_CONTACTO && resultCode == RESULT_OK) {
+            Uri contactUri = data.getData();
+            verContacto(contactUri);
+        }
         if (requestCode == CONTS_ENVIAR_CONTACTO && resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
             Cursor cursor = getContentResolver().query(contactUri, null,null, null, null);
@@ -59,9 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 enviarTexto(DatosDeContacto);
             }
         }
-       if (requestCode == CONTS_MOSTRAR_CONTACTO && resultCode == RESULT_OK) {
+        if (requestCode == CONTS_LLAMAR_CONTACTO && resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
-            verContacto(contactUri);
+            Cursor cursor = getContentResolver().query(contactUri, null,null, null, null);
+            if (cursor != null && cursor.moveToFirst()){
+                int columnaNumero = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                String numero = cursor.getString(columnaNumero);
+                llarmarnumero(numero);
+            }
         }
     }
 
@@ -78,5 +92,11 @@ public class MainActivity extends AppCompatActivity {
     public void verContacto(Uri contactUri) {
         Intent intentVerContacto = new Intent(Intent.ACTION_VIEW, contactUri);
         startActivity(intentVerContacto);
+    }
+
+    public void llarmarnumero(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        startActivity(intent);
     }
 }
