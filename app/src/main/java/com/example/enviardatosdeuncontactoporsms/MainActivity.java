@@ -23,16 +23,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void SelecionarMostrarContacto(View view){
+    public void selecionarMostrarContacto(View view){
         seleccionarContacto(1);
     }
 
-    public void SelecionarEnviarContacto(View view){
+    public void selecionarEnviarContacto(View view){
         seleccionarContacto(2);
     }
 
-    public void SelecionarLlamarContacto(View view){
+    public void selecionarLlamarContacto(View view){
         seleccionarContacto(3);
+    }
+
+    public void irIntentenviarMensaje(View view){
+        Intent intentActivityEnviarMensajeTexto = new Intent(this,EnviarMensajeTexto.class);
+        startActivity(intentActivityEnviarMensajeTexto);
     }
 
     public void seleccionarContacto(int accion) {
