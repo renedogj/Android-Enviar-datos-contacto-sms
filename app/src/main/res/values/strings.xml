@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Administrar Contactos</string>
     <string name="seleccionar_y_mostrar_contacto">Seleccionar y mostrar un contacto</string>
     <string name="seleccionar_y_enviar_contacto">Seleccionar y enviar un contacto</string>
     <string name="seleccionar_y_llamar_contacto">Seleccionar y llamar a un contacto</string>
