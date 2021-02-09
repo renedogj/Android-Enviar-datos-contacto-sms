@@ -17,7 +17,6 @@ public class EnviarMensajeTexto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enviar_mensaje_texto);
-
         tvMensaje = findViewById(R.id.etm_texto_enviar);
     }
 
